@@ -229,6 +229,145 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jiangjihui.github.io/blog/blog/2018/04/13/2018041301/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xqlsrjjjh">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JJH-NoteBook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/04/13/2018041301/" itemprop="url">分布式系统中的幂等性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-13T09:21:52+08:00">
+                2018-04-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="分布式系统中的幂等性"><a href="#分布式系统中的幂等性" class="headerlink" title="分布式系统中的幂等性"></a>分布式系统中的幂等性</h1><p>现如今我们的系统大多拆分为分布式SOA(面向服务的架构)，或者微服务，一套系统中包含了多个子系统服务，而一个子系统服务往往会去调用另一个服务，而服务调用服务无非就是使用RPC通信或者restful，既然是通信，那么就有可能再服务器处理完毕后返回结果的时候挂掉，这个时候用户端发现很久没有反应，那么就会多次点击按钮，这样请求有多次，那么处理数据的结果是否要统一呢？那是肯定的！尤其再支付场景。</p>
+<hr>
+<h2 id="幂等性"><a href="#幂等性" class="headerlink" title="幂等性"></a>幂等性</h2><p>就是用户对于同一操作发起的一次请求或者多次请求的结果是一致的，不会因为多次点击而产生了副作用。举个最简单的例子，那就是支付，用户购买商品使用约支付，支付扣款成功，但是返回结果的时候网络异常，此时钱已经扣了，用户再次点击按钮，此时会进行第二次扣款，返回结果成功，用户查询余额返发现多扣钱了，流水记录也变成了两条</p>
+<h3 id="那么如何设计接口才能做到幂等呢？"><a href="#那么如何设计接口才能做到幂等呢？" class="headerlink" title="那么如何设计接口才能做到幂等呢？"></a>那么如何设计接口才能做到幂等呢？</h3><p> <strong>方法一：单次支付请求</strong><br> 也就是直接支付了，不需要额外的数据库操作了，这个时候发起异步请求创建一个唯一的ticketId，就是门票，这张门票只能使用一次就作废，具体步骤如下：</p>
+<ol>
+<li>异步请求获取门票</li>
+<li>调用支付，传入门票</li>
+<li>根据门票ID查询此次操作是否存在，如果存在则表示该操作已经执行过，直接返回结果；如果不存在，支付扣款，保存结果</li>
+<li>返回结果到客户端</li>
+</ol>
+<p>如果步骤4通信失败，用户再次发起请求，那么最终结果还是一样的</p>
+<p><strong>方法二：分布式环境下各个服务相互调用</strong><br>举例支付系统，我们支付的时候先要扣款，然后更新订单，这个地方就涉及到了订单服务以及支付服务了。<br>用户调用支付，扣款成功后，更新对应订单状态，然后再保存流水。<br>而在这个地方就没必要使用门票ticketId了，因为会比较显的麻烦（支付状态：未支付，已支付）步骤：</p>
+<ol>
+<li>查询订单支付状态</li>
+<li>如果已经支付，直接返回结果</li>
+<li>如果未支付，则支付扣款并且保存流水</li>
+<li>返回支付结果</li>
+</ol>
+<p>如果步骤4通信失败，用户再次发起请求，那么最终结果还是一样的</p>
+<p>注：幂等，也可以称之为冲正，保证客户端与服务端的交易一致性，避免多次扣款。</p>
+<h2 id="参考：https-www-cnblogs-com-leechenxiang-p-6626629-html"><a href="#参考：https-www-cnblogs-com-leechenxiang-p-6626629-html" class="headerlink" title="参考：https://www.cnblogs.com/leechenxiang/p/6626629.html"></a>参考：<a href="https://www.cnblogs.com/leechenxiang/p/6626629.html" target="_blank" rel="noopener">https://www.cnblogs.com/leechenxiang/p/6626629.html</a></h2>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jiangjihui.github.io/blog/blog/2018/04/09/2018040901/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -517,7 +656,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/2018/03/21/hello-world/" itemprop="url">Hello World</a></h1>
+                <a class="post-title-link" href="/blog/2018/03/21/hello-world/" itemprop="url">Hexo</a></h1>
         
 
         <div class="post-meta">
@@ -570,6 +709,7 @@
         
           
             <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<p>CSDN的md编辑器编辑：<a href="http://write.blog.csdn.net/mdeditor" target="_blank" rel="noopener">http://write.blog.csdn.net/mdeditor</a><br>发布步骤：<br>    hexo clean<br>    hexo g<br>    hexo d</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
@@ -659,7 +799,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

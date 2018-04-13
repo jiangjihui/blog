@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="Vue的双向数据绑定原理vue.js 是采用数据劫持结合发布者-订阅者模式的方式，通过Object.defineProperty()来劫持各个属性的setter，getter，在数据变动时发布消息给订阅者，触发相应的监听回调。  具体步骤： 需要observe的数据对象进行递归遍历，包括子属性对象的属性，都加上 setter和getter这样的话，给这个对象的某个值赋值，就会触发setter，那么">
+<meta name="description" content="分布式系统中的幂等性现如今我们的系统大多拆分为分布式SOA(面向服务的架构)，或者微服务，一套系统中包含了多个子系统服务，而一个子系统服务往往会去调用另一个服务，而服务调用服务无非就是使用RPC通信或者restful，既然是通信，那么就有可能再服务器处理完毕后返回结果的时候挂掉，这个时候用户端发现很久没有反应，那么就会多次点击按钮，这样请求有多次，那么处理数据的结果是否要统一呢？那是肯定的！尤其再">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Vue的双向数据绑定原理">
-<meta property="og:url" content="https://jiangjihui.github.io/blog/2018/04/09/2018040901/index.html">
+<meta property="og:title" content="分布式系统中的幂等性">
+<meta property="og:url" content="https://jiangjihui.github.io/blog/2018/04/13/2018041301/index.html">
 <meta property="og:site_name" content="JJH-NoteBook">
-<meta property="og:description" content="Vue的双向数据绑定原理vue.js 是采用数据劫持结合发布者-订阅者模式的方式，通过Object.defineProperty()来劫持各个属性的setter，getter，在数据变动时发布消息给订阅者，触发相应的监听回调。  具体步骤： 需要observe的数据对象进行递归遍历，包括子属性对象的属性，都加上 setter和getter这样的话，给这个对象的某个值赋值，就会触发setter，那么">
+<meta property="og:description" content="分布式系统中的幂等性现如今我们的系统大多拆分为分布式SOA(面向服务的架构)，或者微服务，一套系统中包含了多个子系统服务，而一个子系统服务往往会去调用另一个服务，而服务调用服务无非就是使用RPC通信或者restful，既然是通信，那么就有可能再服务器处理完毕后返回结果的时候挂掉，这个时候用户端发现很久没有反应，那么就会多次点击按钮，这样请求有多次，那么处理数据的结果是否要统一呢？那是肯定的！尤其再">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-09T07:14:17.110Z">
+<meta property="og:updated_time" content="2018-04-13T01:22:21.360Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Vue的双向数据绑定原理">
-<meta name="twitter:description" content="Vue的双向数据绑定原理vue.js 是采用数据劫持结合发布者-订阅者模式的方式，通过Object.defineProperty()来劫持各个属性的setter，getter，在数据变动时发布消息给订阅者，触发相应的监听回调。  具体步骤： 需要observe的数据对象进行递归遍历，包括子属性对象的属性，都加上 setter和getter这样的话，给这个对象的某个值赋值，就会触发setter，那么">
+<meta name="twitter:title" content="分布式系统中的幂等性">
+<meta name="twitter:description" content="分布式系统中的幂等性现如今我们的系统大多拆分为分布式SOA(面向服务的架构)，或者微服务，一套系统中包含了多个子系统服务，而一个子系统服务往往会去调用另一个服务，而服务调用服务无非就是使用RPC通信或者restful，既然是通信，那么就有可能再服务器处理完毕后返回结果的时候挂掉，这个时候用户端发现很久没有反应，那么就会多次点击按钮，这样请求有多次，那么处理数据的结果是否要统一呢？那是肯定的！尤其再">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://jiangjihui.github.io/blog/2018/04/09/2018040901/"/>
+  <link rel="canonical" href="https://jiangjihui.github.io/blog/2018/04/13/2018041301/"/>
 
 
 
 
 
-  <title>Vue的双向数据绑定原理 | JJH-NoteBook</title>
+  <title>分布式系统中的幂等性 | JJH-NoteBook</title>
   
 
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jiangjihui.github.io/blog/blog/2018/04/09/2018040901/">
+    <link itemprop="mainEntityOfPage" href="https://jiangjihui.github.io/blog/blog/2018/04/13/2018041301/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xqlsrjjjh">
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Vue的双向数据绑定原理</h1>
+          <h1 class="post-title" itemprop="name headline">分布式系统中的幂等性</h1>
         
 
         <div class="post-meta">
@@ -261,8 +261,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-09T15:12:34+08:00">
-                2018-04-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-13T09:21:52+08:00">
+                2018-04-13
               </time>
             
 
@@ -299,23 +299,27 @@
       
 
       
-        <h1 id="Vue的双向数据绑定原理"><a href="#Vue的双向数据绑定原理" class="headerlink" title="Vue的双向数据绑定原理"></a>Vue的双向数据绑定原理</h1><p>vue.js 是采用数据劫持结合发布者-订阅者模式的方式，通过Object.defineProperty()来劫持各个属性的setter，getter，在数据变动时发布消息给订阅者，触发相应的监听回调。</p>
+        <h1 id="分布式系统中的幂等性"><a href="#分布式系统中的幂等性" class="headerlink" title="分布式系统中的幂等性"></a>分布式系统中的幂等性</h1><p>现如今我们的系统大多拆分为分布式SOA(面向服务的架构)，或者微服务，一套系统中包含了多个子系统服务，而一个子系统服务往往会去调用另一个服务，而服务调用服务无非就是使用RPC通信或者restful，既然是通信，那么就有可能再服务器处理完毕后返回结果的时候挂掉，这个时候用户端发现很久没有反应，那么就会多次点击按钮，这样请求有多次，那么处理数据的结果是否要统一呢？那是肯定的！尤其再支付场景。</p>
 <hr>
-<h2 id="具体步骤："><a href="#具体步骤：" class="headerlink" title="具体步骤："></a>具体步骤：</h2><ol>
-<li><p>需要observe的数据对象进行递归遍历，包括子属性对象的属性，都加上 setter和getter这样的话，给这个对象的某个值赋值，就会触发setter，那么就能监听到了数据变化</p>
-</li>
-<li><p>compile解析模板指令，将模板中的变量替换成数据，然后初始化渲染页面视图，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，更新视图</p>
-</li>
-<li><p>Watcher订阅者是Observer和Compile之间通信的桥梁，主要做的事情是:</p>
-<pre><code>&gt; 在自身实例化时往属性订阅器(dep)里面添加自己
-&gt; 自身必须有一个update()方法
-&gt; 待属性变动dep.notice()通知时，能调用自身的update()方法，并触发Compile中绑定的回调，则功成身退。
-</code></pre></li>
-<li><p>MVVM作为数据绑定的入口，整合Observer、Compile和Watcher三者，通过Observer来监听自己的model数据变化，通过Compile来解析编译模板指令，最终利用Watcher搭起Observer和Compile之间的通信桥梁，达到数据变化 -&gt; 视图更新；视图交互变化(input) -&gt; 数据model变更的双向绑定效果。</p>
-</li>
+<h2 id="幂等性"><a href="#幂等性" class="headerlink" title="幂等性"></a>幂等性</h2><p>就是用户对于同一操作发起的一次请求或者多次请求的结果是一致的，不会因为多次点击而产生了副作用。举个最简单的例子，那就是支付，用户购买商品使用约支付，支付扣款成功，但是返回结果的时候网络异常，此时钱已经扣了，用户再次点击按钮，此时会进行第二次扣款，返回结果成功，用户查询余额返发现多扣钱了，流水记录也变成了两条</p>
+<h3 id="那么如何设计接口才能做到幂等呢？"><a href="#那么如何设计接口才能做到幂等呢？" class="headerlink" title="那么如何设计接口才能做到幂等呢？"></a>那么如何设计接口才能做到幂等呢？</h3><p> <strong>方法一：单次支付请求</strong><br> 也就是直接支付了，不需要额外的数据库操作了，这个时候发起异步请求创建一个唯一的ticketId，就是门票，这张门票只能使用一次就作废，具体步骤如下：</p>
+<ol>
+<li>异步请求获取门票</li>
+<li>调用支付，传入门票</li>
+<li>根据门票ID查询此次操作是否存在，如果存在则表示该操作已经执行过，直接返回结果；如果不存在，支付扣款，保存结果</li>
+<li>返回结果到客户端</li>
 </ol>
-<hr>
-
+<p>如果步骤4通信失败，用户再次发起请求，那么最终结果还是一样的</p>
+<p><strong>方法二：分布式环境下各个服务相互调用</strong><br>举例支付系统，我们支付的时候先要扣款，然后更新订单，这个地方就涉及到了订单服务以及支付服务了。<br>用户调用支付，扣款成功后，更新对应订单状态，然后再保存流水。<br>而在这个地方就没必要使用门票ticketId了，因为会比较显的麻烦（支付状态：未支付，已支付）步骤：</p>
+<ol>
+<li>查询订单支付状态</li>
+<li>如果已经支付，直接返回结果</li>
+<li>如果未支付，则支付扣款并且保存流水</li>
+<li>返回支付结果</li>
+</ol>
+<p>如果步骤4通信失败，用户再次发起请求，那么最终结果还是一样的</p>
+<p>注：幂等，也可以称之为冲正，保证客户端与服务端的交易一致性，避免多次扣款。</p>
+<h2 id="参考：https-www-cnblogs-com-leechenxiang-p-6626629-html"><a href="#参考：https-www-cnblogs-com-leechenxiang-p-6626629-html" class="headerlink" title="参考：https://www.cnblogs.com/leechenxiang/p/6626629.html"></a>参考：<a href="https://www.cnblogs.com/leechenxiang/p/6626629.html" target="_blank" rel="noopener">https://www.cnblogs.com/leechenxiang/p/6626629.html</a></h2>
       
     </div>
     
@@ -339,8 +343,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/03/21/apacheHTTPServer/" rel="next" title="Apache HTTP Server">
-                <i class="fa fa-chevron-left"></i> Apache HTTP Server
+              <a href="/blog/2018/04/09/2018040901/" rel="next" title="Vue的双向数据绑定原理">
+                <i class="fa fa-chevron-left"></i> Vue的双向数据绑定原理
               </a>
             
           </div>
@@ -348,10 +352,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018/04/13/2018041301/" rel="prev" title="分布式系统中的幂等性">
-                分布式系统中的幂等性 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -465,7 +465,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Vue的双向数据绑定原理"><span class="nav-number">1.</span> <span class="nav-text">Vue的双向数据绑定原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#具体步骤："><span class="nav-number">1.1.</span> <span class="nav-text">具体步骤：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式系统中的幂等性"><span class="nav-number">1.</span> <span class="nav-text">分布式系统中的幂等性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#幂等性"><span class="nav-number">1.1.</span> <span class="nav-text">幂等性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#那么如何设计接口才能做到幂等呢？"><span class="nav-number">1.1.1.</span> <span class="nav-text">那么如何设计接口才能做到幂等呢？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考：https-www-cnblogs-com-leechenxiang-p-6626629-html"><span class="nav-number">1.2.</span> <span class="nav-text">参考：https://www.cnblogs.com/leechenxiang/p/6626629.html</span></a></li></ol></li></ol></div>
             
 
           </div>
