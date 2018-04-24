@@ -229,6 +229,147 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jiangjihui.github.io/blog/blog/2018/04/24/2018042401/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xqlsrjjjh">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JJH-NoteBook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/2018/04/24/2018042401/" itemprop="url">Vue的双向数据绑定原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-24T21:28:44+08:00">
+                2018-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="MyBatis的执行流程"><a href="#MyBatis的执行流程" class="headerlink" title="MyBatis的执行流程"></a>MyBatis的执行流程</h1><hr>
+<ol>
+<li><p>mybatis <strong>配置文件</strong>，包括Mybatis全局配置文件和Mybatis映射文件，其中全局配置文件配置了数据源、事务等信息；映射文件配置了SQL执行相关的信息。</p>
+</li>
+<li><p>mybatis通过读取配置文件信息（全局配置文件和映射文件），生成<strong>Configuration</strong>对象，然后根据Configuration构造出SqlSessionFactory，即会话工厂。</p>
+</li>
+<li><p>通过<strong>SqlSessionFactory</strong>，可以创建SqlSession即会话。Mybatis是通过SqlSession来操作数据库的。</p>
+</li>
+<li><p><strong>SqlSession</strong>本身不能直接操作数据库，它是通过底层的Executor执行器接口来操作数据库的。Executor接口有两个实现类，一个是普通执行器，一个是缓存执行器（默认）。MyBatis封装了对数据库的访问，把对数据库的会话和事务控制放到了SqlSession对象中</p>
+</li>
+<li><p><strong>Executor</strong>执行器要处理的SQL信息是封装到一个底层对象MappedStatement中。该对象包括：SQL语句、输入参数映射信息、输出结果集映射信息。其中输入参数和输出结果的映射类型包括java的简单类型、HashMap集合对象、POJO对象类型。</p>
+<pre><code>&gt;***Executor的功能和作用***
+ &gt; 根据传递的参数，完成SQL语句的动态解析，生成BoundSql对象，供StatementHandler使用；
+为查询创建缓存，以提高性能；
+创建JDBC的Statement连接对象，传递给StatementHandler对象，返回List查询结果；
+</code></pre></li>
+</ol>
+<hr>
+<blockquote>
+<p>参考：<a href="https://blog.csdn.net/qq_32166627/article/details/70741729" target="_blank" rel="noopener">https://blog.csdn.net/qq_32166627/article/details/70741729</a></p>
+</blockquote>
+<hr>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://jiangjihui.github.io/blog/blog/2018/04/16/2018041601/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -933,7 +1074,7 @@
               
                 <a href="/blog/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="Mybatis与JPA比较 Mybatis 需要在spring-boot的主类添加@MapperScan(“com.example.demo.dao”) 需要添加Mapper(Dao)接口，自定义所有的Dao方法以及使用注解或者xml添加对应方法的sql实现。 没有自动建表，需要手动建表。 配置application.properties连接数据库属性。  JPA 需要在pojo类添加注解@Ent">
+<meta name="description" content="MyBatis的执行流程  mybatis 配置文件，包括Mybatis全局配置文件和Mybatis映射文件，其中全局配置文件配置了数据源、事务等信息；映射文件配置了SQL执行相关的信息。  mybatis通过读取配置文件信息（全局配置文件和映射文件），生成Configuration对象，然后根据Configuration构造出SqlSessionFactory，即会话工厂。  通过SqlSess">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mybatis与JPA比较">
-<meta property="og:url" content="https://jiangjihui.github.io/blog/2018/04/16/2018041601/index.html">
+<meta property="og:title" content="Vue的双向数据绑定原理">
+<meta property="og:url" content="https://jiangjihui.github.io/blog/2018/04/24/2018042401/index.html">
 <meta property="og:site_name" content="JJH-NoteBook">
-<meta property="og:description" content="Mybatis与JPA比较 Mybatis 需要在spring-boot的主类添加@MapperScan(“com.example.demo.dao”) 需要添加Mapper(Dao)接口，自定义所有的Dao方法以及使用注解或者xml添加对应方法的sql实现。 没有自动建表，需要手动建表。 配置application.properties连接数据库属性。  JPA 需要在pojo类添加注解@Ent">
+<meta property="og:description" content="MyBatis的执行流程  mybatis 配置文件，包括Mybatis全局配置文件和Mybatis映射文件，其中全局配置文件配置了数据源、事务等信息；映射文件配置了SQL执行相关的信息。  mybatis通过读取配置文件信息（全局配置文件和映射文件），生成Configuration对象，然后根据Configuration构造出SqlSessionFactory，即会话工厂。  通过SqlSess">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-16T02:10:33.894Z">
+<meta property="og:updated_time" content="2018-04-24T13:29:35.807Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mybatis与JPA比较">
-<meta name="twitter:description" content="Mybatis与JPA比较 Mybatis 需要在spring-boot的主类添加@MapperScan(“com.example.demo.dao”) 需要添加Mapper(Dao)接口，自定义所有的Dao方法以及使用注解或者xml添加对应方法的sql实现。 没有自动建表，需要手动建表。 配置application.properties连接数据库属性。  JPA 需要在pojo类添加注解@Ent">
+<meta name="twitter:title" content="Vue的双向数据绑定原理">
+<meta name="twitter:description" content="MyBatis的执行流程  mybatis 配置文件，包括Mybatis全局配置文件和Mybatis映射文件，其中全局配置文件配置了数据源、事务等信息；映射文件配置了SQL执行相关的信息。  mybatis通过读取配置文件信息（全局配置文件和映射文件），生成Configuration对象，然后根据Configuration构造出SqlSessionFactory，即会话工厂。  通过SqlSess">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://jiangjihui.github.io/blog/2018/04/16/2018041601/"/>
+  <link rel="canonical" href="https://jiangjihui.github.io/blog/2018/04/24/2018042401/"/>
 
 
 
 
 
-  <title>Mybatis与JPA比较 | JJH-NoteBook</title>
+  <title>Vue的双向数据绑定原理 | JJH-NoteBook</title>
   
 
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jiangjihui.github.io/blog/blog/2018/04/16/2018041601/">
+    <link itemprop="mainEntityOfPage" href="https://jiangjihui.github.io/blog/blog/2018/04/24/2018042401/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xqlsrjjjh">
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Mybatis与JPA比较</h1>
+          <h1 class="post-title" itemprop="name headline">Vue的双向数据绑定原理</h1>
         
 
         <div class="post-meta">
@@ -261,8 +261,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-16T10:09:03+08:00">
-                2018-04-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-24T21:28:44+08:00">
+                2018-04-24
               </time>
             
 
@@ -299,20 +299,27 @@
       
 
       
-        <h1 id="Mybatis与JPA比较"><a href="#Mybatis与JPA比较" class="headerlink" title="Mybatis与JPA比较"></a>Mybatis与JPA比较</h1><hr>
-<h2 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h2><ul>
-<li>需要在spring-boot的主类添加@MapperScan(“com.example.demo.dao”)</li>
-<li>需要添加Mapper(Dao)接口，自定义所有的Dao方法以及使用注解或者xml添加对应方法的sql实现。</li>
-<li>没有自动建表，需要手动建表。</li>
-<li>配置application.properties连接数据库属性。</li>
-</ul>
-<h2 id="JPA"><a href="#JPA" class="headerlink" title="JPA"></a>JPA</h2><ul>
-<li>需要在pojo类添加注解@Entity，pojo类对应的每个属性需要添加@Id或者@Column。</li>
-<li>添加Repository(Dao)接口，需要实现JpaRepository接口，可以不写方法声明。</li>
-<li>配置application.properties连接数据库属性。</li>
-<li>可通过配置spring.jpa.properties.hibernate.hbm2ddl.auto=update属性实现自动建表。</li>
-</ul>
-<p><strong>总结</strong>：都需要添加Dao类，Mybatis的Dao类需要实现具体sql（注解或者xml），JPA不需要。对于pojo类的侵入性而言，Mybatis无需更改pojo类的任何地方，而JPA需要添加注解实现映射。</p>
+        <h1 id="MyBatis的执行流程"><a href="#MyBatis的执行流程" class="headerlink" title="MyBatis的执行流程"></a>MyBatis的执行流程</h1><hr>
+<ol>
+<li><p>mybatis <strong>配置文件</strong>，包括Mybatis全局配置文件和Mybatis映射文件，其中全局配置文件配置了数据源、事务等信息；映射文件配置了SQL执行相关的信息。</p>
+</li>
+<li><p>mybatis通过读取配置文件信息（全局配置文件和映射文件），生成<strong>Configuration</strong>对象，然后根据Configuration构造出SqlSessionFactory，即会话工厂。</p>
+</li>
+<li><p>通过<strong>SqlSessionFactory</strong>，可以创建SqlSession即会话。Mybatis是通过SqlSession来操作数据库的。</p>
+</li>
+<li><p><strong>SqlSession</strong>本身不能直接操作数据库，它是通过底层的Executor执行器接口来操作数据库的。Executor接口有两个实现类，一个是普通执行器，一个是缓存执行器（默认）。MyBatis封装了对数据库的访问，把对数据库的会话和事务控制放到了SqlSession对象中</p>
+</li>
+<li><p><strong>Executor</strong>执行器要处理的SQL信息是封装到一个底层对象MappedStatement中。该对象包括：SQL语句、输入参数映射信息、输出结果集映射信息。其中输入参数和输出结果的映射类型包括java的简单类型、HashMap集合对象、POJO对象类型。</p>
+<pre><code>&gt;***Executor的功能和作用***
+ &gt; 根据传递的参数，完成SQL语句的动态解析，生成BoundSql对象，供StatementHandler使用；
+为查询创建缓存，以提高性能；
+创建JDBC的Statement连接对象，传递给StatementHandler对象，返回List查询结果；
+</code></pre></li>
+</ol>
+<hr>
+<blockquote>
+<p>参考：<a href="https://blog.csdn.net/qq_32166627/article/details/70741729" target="_blank" rel="noopener">https://blog.csdn.net/qq_32166627/article/details/70741729</a></p>
+</blockquote>
 <hr>
 
       
@@ -338,8 +345,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2018/04/13/2018041301/" rel="next" title="分布式系统中的幂等性">
-                <i class="fa fa-chevron-left"></i> 分布式系统中的幂等性
+              <a href="/blog/2018/04/16/2018041601/" rel="next" title="Mybatis与JPA比较">
+                <i class="fa fa-chevron-left"></i> Mybatis与JPA比较
               </a>
             
           </div>
@@ -347,10 +354,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/blog/2018/04/24/2018042401/" rel="prev" title="Vue的双向数据绑定原理">
-                Vue的双向数据绑定原理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -464,7 +467,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Mybatis与JPA比较"><span class="nav-number">1.</span> <span class="nav-text">Mybatis与JPA比较</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis"><span class="nav-number">1.1.</span> <span class="nav-text">Mybatis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JPA"><span class="nav-number">1.2.</span> <span class="nav-text">JPA</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MyBatis的执行流程"><span class="nav-number">1.</span> <span class="nav-text">MyBatis的执行流程</span></a></li></ol></div>
             
 
           </div>
