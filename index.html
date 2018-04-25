@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/blog/2018/04/25/2018042501/" itemprop="url">MyBatis的执行流程</a></h1>
+                <a class="post-title-link" href="/blog/2018/04/25/2018042501/" itemprop="url">Tomcat</a></h1>
         
 
         <div class="post-meta">
@@ -300,27 +300,45 @@
       
         
           
-            <h1 id="MyBatis的执行流程"><a href="#MyBatis的执行流程" class="headerlink" title="MyBatis的执行流程"></a>MyBatis的执行流程</h1><hr>
+            <h1 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h1><hr>
+<p>一直用着tomcat作为应用服务器，但是对tomcat的原理一直停留在会用而已的阶段，今天仔细学习了下，看了网上大量的文章，把自己不懂的一些概念拿出来列出来，其中有各位大神的精炼解析，也添加了一些自己平时遇到的问题及解决方法</p>
+<hr>
+<h2 id="Tomcat处理资源"><a href="#Tomcat处理资源" class="headerlink" title="Tomcat处理资源"></a>Tomcat处理资源</h2><p><strong>Tomcat访问所有的资源，都是用Servlet来实现的。所以Tomcat又叫Servlet容器嘛，什么都交给Servlet来处理。</strong></p>
+<p>在Tomcat看来，资源分3种：</p>
 <ol>
-<li><p>mybatis <strong>配置文件</strong>，包括Mybatis全局配置文件和Mybatis映射文件，其中全局配置文件配置了数据源、事务等信息；映射文件配置了SQL执行相关的信息。</p>
-</li>
-<li><p>mybatis通过读取配置文件信息（全局配置文件和映射文件），生成<strong>Configuration</strong>对象，然后根据Configuration构造出SqlSessionFactory，即会话工厂。</p>
-</li>
-<li><p>通过<strong>SqlSessionFactory</strong>，可以创建SqlSession即会话。Mybatis是通过SqlSession来操作数据库的。</p>
-</li>
-<li><p><strong>SqlSession</strong>本身不能直接操作数据库，它是通过底层的Executor执行器接口来操作数据库的。Executor接口有两个实现类，一个是普通执行器，一个是缓存执行器（默认）。MyBatis封装了对数据库的访问，把对数据库的会话和事务控制放到了SqlSession对象中</p>
-</li>
-<li><p><strong>Executor</strong>执行器要处理的SQL信息是封装到一个底层对象MappedStatement中。该对象包括：SQL语句、输入参数映射信息、输出结果集映射信息。其中输入参数和输出结果的映射类型包括java的简单类型、HashMap集合对象、POJO对象类型。</p>
-<pre><code>&gt;**Executor的功能和作用**
- &gt; 根据传递的参数，完成SQL语句的动态解析，生成BoundSql对象，供StatementHandler使用；
-&gt; 为查询创建缓存，以提高性能；
-&gt; 创建JDBC的Statement连接对象，传递给StatementHandler对象，返回List查询结果；
-</code></pre></li>
+<li>静态资源，如css,html,js,jpg,png等。交由DefaultServlet类处理</li>
+<li>Servlet，交由InvokerServlet类处理</li>
+<li>JSP，交由JspServlet类来处理</li>
 </ol>
+<p><strong>那么什么时候调用哪个Servlet呢？</strong></p>
+<p>有一个类叫做org.apache.tomcat.util.http.mapper.Mapper，它一共进行了7个大的规则判断，第7个，就是判断是否是该用DefaultServlet。<br><strong>简单地说：</strong>先看是不是servlet,然后看是不是jsp，如果都不是，那么就是你DefaultServlet的活儿了。<br>到了DefaultServlet之后，就是一个普通的HttpServlet了，doPost方法会交由doGet处理，doGet又交由一个叫做 serveResource的方法处理，在serveResource方法里又瞎搞八搞了许多事情，最后在一个叫做copy()方法里，把静态资源对应的输入流读取出来，扔到了输出流里，这样你的浏览器就看到数据了。</p>
+<hr>
+<h2 id="Tomcat调优"><a href="#Tomcat调优" class="headerlink" title="Tomcat调优"></a>Tomcat调优</h2><p>Tomcat的优化分成两块：</p>
+<ol>
+<li>Tomcat启动命令行中的优化参数即JVM优化</li>
+<li>Tomcat容器自身参数的优化（这块很像ApacheHttp Server）</li>
+</ol>
+<p><strong>1 启动行参数优化</strong></p>
+<p>启动行参数的优化其实就是JVM的调优，可以参考网上JVM调优的一些方法（<a href="https://blog.csdn.net/wangyonglin1123/article/details/50986524" target="_blank" rel="noopener">这里给出一个链接</a>），Tomcat 的启动参数位于tomcat的安装目录\bin目录下的catalina.sh文件，在最开始注释文字的最后一段也就是真正有效的shell命令开始的那里加入需要添加的参数即可，需要注意的一点是在生产环境需要添加一个tomcat特有的参数：-server。这个参数告诉mysql这是在真正生产环境，它会自动做一些优化的。</p>
+<p><strong>2 容器优化</strong><br>前面我们对Tomcat启动时的命令进行了优化，增加了系统的JVM可使用数、垃圾回收效率与线程阻塞情况、增加了系统响应效率等还有一个很重要的指标，我们没有去做优化，就是吞吐量。<br>打开tomcat安装目录\conf\server.xml文件，定位到这一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot; &gt;</span><br></pre></td></tr></table></figure>
+<p>这一行就是我们的tomcat容器性能参数设置的地方，它一般都会有一个默认值，这些默认值是远远不够我们的使用的，我们来看经过更改后的这一段的配置（<a href="https://blog.csdn.net/wangyonglin1123/article/details/50986524" target="_blank" rel="noopener">配置的详细含义</a>）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot; </span><br><span class="line">	          URIEncoding=&quot;UTF-8&quot;  minSpareThreads=&quot;25&quot; maxSpareThreads=&quot;75&quot;</span><br><span class="line">	          enableLookups=&quot;false&quot; disableUploadTimeout=&quot;true&quot; connectionTimeout=&quot;20000&quot;</span><br><span class="line">	          acceptCount=&quot;300&quot;  maxThreads=&quot;300&quot; maxProcessors=&quot;1000&quot; minProcessors=&quot;5&quot;</span><br><span class="line">	          useURIValidationHack=&quot;false&quot;</span><br><span class="line">	          compression=&quot;on&quot; compressionMinSize=&quot;2048&quot;</span><br><span class="line">	          compressableMimeType=&quot;text/html,text/xml,text/javascript,text/css,text/plain&quot;</span><br><span class="line">	          redirectPort=&quot;8443&quot;</span><br><span class="line">	/&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>3 Tomcat的运行模式</strong><br>    <strong>bio</strong>： (blocking I/O)，阻塞式I/O操作，一般而言，表示Tomcat使用的是传统的Java I/O操作。bio模式是三种运行模式中性能最低的一种。<br>    <strong>nio</strong>： nio(new I/O)，是Java SE 1.4及后续版本提供的一种新的I/O操作方式(即Java.nio包及其子包)。java nio是一个基于缓冲区、并能提供非阻塞I/O操作的Java API，因此nio也被看成是non-blocking I/O的缩写。它拥有比传统I/O操作(bio)更好的并发运行性能。关于nio与bio在tomcat上的差别可以参考这个简书：NIO只是优化了网络IO的读写，如果系统的瓶颈不在这里，比如每次读取的字节说都是500b，那么BIO和NIO在性能上没有区别。（个人感觉与socket的nio一样，并发小于1000时，区别不大，而并发很多的时候，更多的是使用nginx）<br>    <strong>apr</strong>： (Apache Portable Runtime/Apache可移植运行时)，是Apache HTTP服务器的支持库。可以简单地理解为Tomcat将以JNI的形式调用Apache HTTP服务器的核心动态链接库来处理文件读取或网络传输操作，从而大大地提高Tomcat对静态文件的处理性能。 Tomcat apr也是在Tomcat上运行高并发应用的首选模式。<br>修改运行模式为NIO模式：修改server.xml里的Connector节点，修改protocol为org.apache.coyote.http11.Http11NioProtocol</p>
+<p><strong>注：</strong>通过对tomcat几个版本的测试，tomcat7默认启动是bio模式，需要优化；tomcat8及8以上默认是nio模式，无需改变运行模式，如果是windows版本的话，包里面还默认携带一个tcnative-1.dll，默认就是在Tomcat apr模式下运行。</p>
+<hr>
+<h2 id="Tomcat版本"><a href="#Tomcat版本" class="headerlink" title="Tomcat版本"></a>Tomcat版本</h2><p>之前在工作中遇到了tomcat 的启动问题，然后同事提到说tomcat的linux版本和windows版本可以互用的，于是去下载官网的源文件，通过对比发现，Linux版本的Tomcat和Windows相比，确实是可以互换的，windows版本包含全部linux版本的文件，只是在windows的版本中多加了2个.exe文件和一个tcnative-1.dll文件。查阅了下之类发现tcnative-1.dll是用于tomcat的apr模式使用。</p>
+<hr>
+<h2 id="编码设置"><a href="#编码设置" class="headerlink" title="编码设置"></a>编码设置</h2><p>之前遇到过tomcat的编码是UTF8的，但是怎么改都改不成GBK，然后查了很多资料，自己也找了很多地方，发现Tomcat 的编码通常在两个地方可以配置，一是conf/<strong>server.xml</strong>，二是bin/<strong>catalina.sh</strong></p>
+<p><strong>conf/server.xml</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;Connector executor=&quot;tomcatThreadPool&quot;</span><br><span class="line">	               port=&quot;8088&quot; protocol=&quot;HTTP/1.1&quot;</span><br><span class="line">	               redirectPort=&quot;8443&quot; URIEncoding=&quot;GBK&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>bin/catalina.sh</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JAVA_OPTS=&quot;$&#123;JAVA_OPTS&#125; -Dfile.encoding=GBK&quot;</span><br></pre></td></tr></table></figure>
 <hr>
 <blockquote>
-<p>参考：<a href="https://blog.csdn.net/qq_32166627/article/details/70741729" target="_blank" rel="noopener">https://blog.csdn.net/qq_32166627/article/details/70741729</a></p>
+<p>参考：<br> <a href="https://www.zhihu.com/question/57400909/answer/154753720" target="_blank" rel="noopener">Tomcat处理资源</a><br> <a href="https://blog.csdn.net/wangyonglin1123/article/details/50986524" target="_blank" rel="noopener">Tomcat调优</a></p>
 </blockquote>
+<hr>
 <hr>
 
           
